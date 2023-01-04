@@ -23,3 +23,24 @@
 * `$ protoc --cpp_out=. *.proto` : generate codes for cpp in *./cpp* directory, use proto files from the active directory
 * `$ protoc --java_out=. *.proto` : generate codes for java in *./java* directory, use proto files from the active directory
 * `$ protoc --java_out=java --python_out=python proto/simple.proto` : generate codes for java in *./java* directory for cpp in *./cpp* directory and use *./proto/simple.proto* file
+
+
+## Prepare Language Specific Environments:
+```
+    $ git clone <>
+```
+
+* python :
+```
+    $ git checkout python
+    $ python3 -m venv venv
+    $ source ./venv/bin/activate
+    $ pip install --upgrade pip
+    $ pip install -r requirements.txt
+
+    # or just irun this command if you have mac on your dev env : 
+    $ make prepare_python
+```
+
+make
+protoc -Iproto --python_out=proto proto/*.proto
