@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-import "06_package.proto";
-
-message MessageSeven {
-    my.package.MessageSix = 1;
-}
