@@ -1,0 +1,166 @@
+/*
+    beginner mistakes : 
+        - proto file names must be in "lower_snake_case.proto" format
+        - if you have a license you should put it onb the top
+        - imports shold be ordered alphabetically.
+
+*/
+
+/*
+    Scalar Types:
+        - Numbers: 
+            - Keyword: 
+                - int32, int64, sint32, sint64
+                - uint32, uint64
+                - fixed32, fixed64, sfixed32, sfixed64
+                - float, double
+            - Default Value: 
+                - '0' for all.
+        
+        - Boolean: 
+            - Keyword:
+                - bool
+            - Default Value:
+                - false 
+        
+        - String:
+            - Keyword:
+                - string
+            - Default Value: 
+                - empty string
+            -Note! : strings only acceps UTF-8 encoded strings or 7bit ASCII encoded strings
+
+        - Bytes:
+            - Keyword:
+                - bytes
+            - Default Value:
+                - empty bytes
+            -Note: Up to you interpret in code
+*/
+
+/*
+    when a field not set : 
+        - a field will not be serialized
+        - populated with default value
+*/
+
+/*
+    TAGS : 
+        - field names are not important for serialization, TAGS are!
+    
+        Syntax:
+            <type> <field_name> = <tag>;
+
+        The Rules:
+            - Smallest tag: 1
+            - Largest tag:  536,870,911
+            - Reserved tags: 19000 to 19999
+
+        Important note : 
+            - Payload is affected by the tags, it means: 
+                - tags are serialized as variants
+                - if the tag is a number from 1 to 15, it will be 1 byte long
+                -  1:15 > 1 byte
+                -  16:2047 > 2bytes
+                - ...
+
+            - you need to keep smallest tag numbers for the most populated fields in your schema !!!!!!
+*/
+
+
+/*
+    REPEATED FIELDS:
+        - repeated fields are just lists
+        - syntax:
+            - repeated <type> <field_name> = <tag>;
+        - value: any number of elements (0 or more)
+        - default value : empty list
+
+*/
+
+/*
+    ENUMS:
+        - Keyword:           enum
+        - Default Value:     first value
+
+        - important note:
+            - first tag of an enum should be zero
+*/
+
+/* Support for data evolution :
+    - those rules are importand for the:
+        - backward compatibility
+        - forward compatibility
+
+    Whatch out when updating protocol buffers : 
+        - Do not change the tags! : 
+            it will result with unexpected behavior, do not change tags, add new field.
+            or use reserved tags 
+        - Before changing the field type: 
+            you should check the documentation for the compatibility
+            when you are changing your type you can jusd add a new field using the type that you want
+
+    Renaming Fields:
+        - You can change the name, tag matters not name, remember
+            - - - - - - - - - - - - - -
+            message Account {
+                // old
+                uint32 id = 1;
+                string first_name = 2;
+            }
+            - - - - - - - - - - - - - -
+            message Account {
+                // new
+                uint32 id = 1;
+                string alias = 2;
+            }
+            - - - - - - - - - - - - - -
+
+    Removing Fields:
+        - use reversed keyword, in order to make sure this tag will not be used
+            - - - - - - - - - - - - - -
+            message Account {
+                // old
+                uint32 id = 1;
+                string first_name = 2;
+            }
+            - - - - - - - - - - - - - -
+            message Account {
+                // new
+                reversed 2;
+                reversed first_name; // optional
+                uint32 id = 1;
+            }
+            - - - - - - - - - - - - - -
+
+    Reversed Fields:
+        - for the forward compatibility
+            message Account {
+                // old
+                reversed 2, 15, 9 to 11;
+                reversed first_name, last_name;
+                uint32 id = 1;
+            }
+
+    Defaults:
+        - defaults are enables forward and backward compatibility.
+        - if the field is unknows it will just get the default value
+
+        !!! - we cannot differentiate a missing value with unset value !!!!!! BE CAREFUL!
+        to prevent that :
+            - not give any business meaning to a default value:
+                - an empty string for an email should be invalid
+*/
+
+/*
+    Protoc Compile Options:
+    TODO: search those options
+        --decode_raw :
+
+        --decode :  
+
+        --encode :
+
+
+
+*/
